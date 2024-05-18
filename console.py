@@ -2,12 +2,15 @@
 """Console Module"""
 import cmd
 import sys
+from models.base_model import BaseModel
 
 
 class HBNBCommand(cmd.Cmd):
     """Contains the functionality for the console"""
 
     prompt = "(hbnb) "
+
+    classes = {'BaseModel': BaseModel}
 
     def preloop(self):
         """Print if isatty is false"""
@@ -34,6 +37,23 @@ class HBNBCommand(cmd.Cmd):
     def emptyline(self):
         """Override the emmptyline method of cmd"""
         pass
+
+    def do_create(self, args):
+        """Create an object of given parameter"""
+        if not args:
+            print("** class name missing **")
+        elif args not in HBNBCommand.classes:
+            print("** class doesn't exist **")
+            return
+        new_instance = HBNBCommand.classes[args]()
+        storage.save()
+        print(new_instance.id)
+        storage.save()
+
+    def help_create(self):
+        """Help info for the create method"""
+        print("Create a class of any type")
+        print("[usage]: create <className>\n")
 
 
 if __name__ == "__main__":
