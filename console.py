@@ -31,6 +31,10 @@ class HBNBCommand(cmd.Cmd):
         """Prints the help documentation for the EOF"""
         print("Exit the program without formatting\n")
 
+    def emptyline(self):
+        """Override the emmptyline method of cmd"""
+        pass
+
 
 if __name__ == "__main__":
     HBNBCommand().cmdloop()
