@@ -1,5 +1,15 @@
 # Project: 0x00. AirBnB clone - The console
+The console
+create your data model
+manage (create, update, destroy, etc) objects via a console / command interpreter
+store and persist objects to a file (JSON file)
+The first piece is to manipulate a powerful storage system. This storage engine will give us an abstraction between “My object” and “How they are stored and persisted”. This means: from your console code (the command interpreter itself) and from the front-end and RestAPI you will build later, you won’t have to pay attention (take care) of how your objects are stored.
 
+
+This abstraction will also allow you to change the type of storage easily without updating all of your codebase.
+
+The console will be a tool to validate this storage engine
+![image1](https://github.com/a3ela/AirBnB_clone/assets/117747814/6acc2078-274a-4854-822d-a8ce26c5463b)
 ## Resources
 
 #### Read or watch:
@@ -14,6 +24,11 @@
 * [Python test cheatsheet](https://intranet.alxswe.com/rltoken/tgNVrKKzlWgS4dfl3mQklw)
 * [cmd module wiki page](https://intranet.alxswe.com/rltoken/EvcaH9uTLlauxuw03WnkOQ)
 * [python unittest](https://intranet.alxswe.com/rltoken/begh14KQA-3ov29KvD_HvA)
+### how to run it
+* Open the Command Prompt and type <br>
+<code>python console.py</code>
+* Type Help once the console runs to see the commands <br>
+<code> (HBNB) Help </code>
 ## Learning Objectives
 
 ### General
@@ -28,6 +43,7 @@
 * What is <code>*args</code> and how to use it
 * What is <code>**kwargs</code> and how to use it
 * How to handle named arguments in a function
+  
 ## Tasks
 
 | Task | File |
