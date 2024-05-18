@@ -5,6 +5,7 @@ import os
 from models.base_model import BaseModel
 import pep8
 
+
 class TestBaseModel(unittest.TestCase):
     """test BaseModel"""
 
@@ -16,7 +17,6 @@ class TestBaseModel(unittest.TestCase):
         style = pep8.StyleGuide(quiet=True)
         p = style.check_files(['models/base_model.py'])
         self.assertEqual(p.total_errors, 0, "Check pep8")
-
 
     def test_save_BaesModel(self):
         """test save_Basemodel"""
@@ -38,6 +38,7 @@ class TestBaseModel(unittest.TestCase):
         self.assertTrue(hasattr(basemodel, "name"))
         self.assertFalse(hasattr(basemodel, "updated_at"))
         self.assertTrue(hasattr(basemodel, "__class__"))
+
 
 if __name__ == "__main__":
     unittest.main()
