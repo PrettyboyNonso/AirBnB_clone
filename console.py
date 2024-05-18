@@ -87,6 +87,41 @@ class HBNBCommand(cmd.Cmd):
         print("Show an individual instance of a class")
         print("[usage]: show <className> <objectId>\n")
 
+    def do_destroy(self, args):
+        """Destroy a specific object"""
+        new_args = args.split(" ")
+        c_name = new_args[0]
+        c_id = new_args[2]
+
+        if c_id and " " in c_id:
+            c_id = c_id.partition(' ')[0]
+
+        if not c_name:
+            print("** class name missing **")
+            return
+
+        if c_name not in HBNBCommand.classes:
+            print("** class doesn't exist **")
+            return
+
+        if not c_id:
+            print('** instance id missing **')
+            return
+
+        key = c_name + "." + c_id
+        try:
+            del(storage.all()[key])
+            storage.save()
+        except KeyError:
+            print("** no instance found **")
+
+    def help_destroy(self):
+        """Help for the destroy command"""
+        print("Destroys an individual instance of a class")
+        print("[usage]: destroy <className> <objectId>\n")
+
+    def do_all
+
 
 if __name__ == "__main__":
     HBNBCommand().cmdloop()
