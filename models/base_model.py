@@ -4,6 +4,7 @@ from datetime import datetime
 
 format_date_time = "%Y-%m-%dT%H:%M:%S.%f"
 
+
 class BaseModel:
     """This is a basemodel"""
 
@@ -31,10 +32,9 @@ class BaseModel:
         self.updated_at = datetime.now()
 
     def to_dict(self):
-        """This method returns a dictionary containing all keys/values of __dict__ of the instance"""
+        """This method returns a dictionary containing all"""
         dict_ionary = self.__dict__.copy()
         dict_ionary['__class__'] = self.__class__.__name__
         dict_ionary['created_at'] = self.created_at.isoformat()
         dict_ionary['updated_at'] = self.updated_at.isoformat()
         return dict_ionary
-
