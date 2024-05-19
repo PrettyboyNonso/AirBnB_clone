@@ -31,6 +31,8 @@ class BaseModel:
     def save(self):
         """This saves changes to the instance"""
         self.updated_at = datetime.now()
+        models.storage.new(self)
+        models.storage.save()
 
     def to_dict(self):
         """This method returns a dictionary containing all"""
