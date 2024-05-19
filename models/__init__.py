@@ -2,3 +2,4 @@
 """
 This file initializes the package
 """
+from models.base_model import BaseModel
