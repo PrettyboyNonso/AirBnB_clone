@@ -1,11 +1,10 @@
-#!/usr/bin/python3
-""" Class FileStorage """
-
+# models/engine/file_storage.py
 import json
-import os
-
+from models.base_model import BaseModel
+from models.user import User
 
 class FileStorage:
+    """Serializes instances to a JSON file & deserializes back to instances"""
     __file_path = "file.json"
     __objects = {}
 
@@ -15,7 +14,7 @@ class FileStorage:
 
     def new(self, obj):
         """Sets in __objects the obj with key <obj class name>.id"""
-        key = f"{obj.__class__.__name__}.{obj.id}"
+        key = obj.__class__.__name__ + "." + obj.id
         self.__objects[key] = obj
 
     def save(self):
@@ -26,10 +25,14 @@ class FileStorage:
 
     def reload(self):
         """Deserializes the JSON file to __objects (only if the JSON file (__file_path) exists)"""
-        if os.path.exists(self.__file_path):
+        try:
             with open(self.__file_path, 'r') as f:
                 obj_dict = json.load(f)
-                for key, value in obj_dict.items():
-                    class_name = value["__class__"]
-                    obj = globals()[class_name](**value)
-                    self.__objects[key] = obj
+            for key, value in obj_dict.items():
+                class_name = value["__class__"]
+                if class_name == "BaseModel":
+                    self.__objects[key] = BaseModel(**value)
+                elif class_name == "User":
+                    self.__objects[key] = User(**value)
+        except FileNotFoundError:
+            pass
