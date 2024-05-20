@@ -154,7 +154,8 @@ class HBNBCommand(cmd.Cmd):
     def default(self, line):
         """
         Handle default behavior when an invalid command is entered.
-        Check if the command follows the format "<class name>.all()" or "<class name>.count()" and call
+        Check if the command follows the format "<class name>.all()", "<class name>.count()",
+        "<class name>.show(<id>)", or "<class name>.destroy(<id>)" and call
         the corresponding class method if it matches.
         """
         parts = line.split('.')
@@ -171,14 +172,26 @@ class HBNBCommand(cmd.Cmd):
                     print(count)
                     return
             elif method_name.startswith('show(') and method_name.endswith(')'):
+                id_str = method_name[5:-1]
                 if class_name in classes:
-                    obj_id = method_name.split('(')[1].split(')')[0]
-                    key = f"{class_name}.{obj_id}"
-                    try:
+                    key = f"{class_name}.{id_str}"
+                    if key in storage.all():
                         print(storage.all()[key])
-                    except KeyError:
+                        return
+                    else:
                         print("** no instance found **")
-                    return
+                        return
+            elif method_name.startswith('destroy(') and method_name.endswith(')'):
+                id_str = method_name[8:-1]
+                if class_name in classes:
+                    key = f"{class_name}.{id_str}"
+                    if key in storage.all():
+                        del storage.all()[key]
+                        storage.save()
+                        return
+                    else:
+                        print("** no instance found **")
+                        return
         print("*** Unknown syntax: {}".format(line))
 
 
