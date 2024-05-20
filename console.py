@@ -170,6 +170,15 @@ class HBNBCommand(cmd.Cmd):
                     count = len([obj for obj in storage.all().values() if isinstance(obj, classes[class_name])])
                     print(count)
                     return
+            elif method_name.startswith('show(') and method_name.endswith(')'):
+                if class_name in classes:
+                    obj_id = method_name.split('(')[1].split(')')[0]
+                    key = f"{class_name}.{obj_id}"
+                    try:
+                        print(storage.all()[key])
+                    except KeyError:
+                        print("** no instance found **")
+                    return
         print("*** Unknown syntax: {}".format(line))
 
 
