@@ -1,39 +1,35 @@
 #!/usr/bin/python3
 """ Class FileStorage """
 
-from json import load, dump
-from os.path import exists
+import json
+import os
+
 
 class FileStorage:
-    """Handles storage of all class instances."""
-
     __file_path = "file.json"
     __objects = {}
 
     def all(self):
-        """Returns the dictionary __objects."""
-        return FileStorage.__objects
+        """Returns the dictionary __objects"""
+        return self.__objects
 
     def new(self, obj):
-        """Sets the obj with key in __objects"""
-        class_name = obj.__class__.__name__
-        obj_id = obj.id
-        FileStorage.__objects[f"{class_name}.{obj_id}"] = obj
+        """Sets in __objects the obj with key <obj class name>.id"""
+        key = f"{obj.__class__.__name__}.{obj.id}"
+        self.__objects[key] = obj
 
     def save(self):
-        """Saves __objects to JSON file"""
-        dict_to_json = {key: obj.to_dict() for key, obj in FileStorage.__objects.items()}
-        with open(FileStorage.__file_path, "w", encoding='utf-8') as file:
-            dump(dict_to_json, file)
+        """Serializes __objects to the JSON file (path: __file_path)"""
+        obj_dict = {key: obj.to_dict() for key, obj in self.__objects.items()}
+        with open(self.__file_path, 'w') as f:
+            json.dump(obj_dict, f)
 
     def reload(self):
-        """Loads storage dictionary from file"""
-        if exists(FileStorage.__file_path):
-            with open(FileStorage.__file_path, "r", encoding='utf-8') as file:
-                obj_dict = load(file)
+        """Deserializes the JSON file to __objects (only if the JSON file (__file_path) exists)"""
+        if os.path.exists(self.__file_path):
+            with open(self.__file_path, 'r') as f:
+                obj_dict = json.load(f)
                 for key, value in obj_dict.items():
-                    class_name = key.split('.')[0]
-                    module_path = f"models.{class_name.lower()}"
-                    module = __import__(module_path, fromlist=[class_name])
-                    class_ = getattr(module, class_name)
-                    FileStorage.__objects[key] = class_(**value)
+                    class_name = value["__class__"]
+                    obj = globals()[class_name](**value)
+                    self.__objects[key] = obj
