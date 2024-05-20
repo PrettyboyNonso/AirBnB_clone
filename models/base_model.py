@@ -1,7 +1,6 @@
 #!/usr/bin/python3
 import uuid
 from datetime import datetime
-import models
 
 format_date_time = "%Y-%m-%dT%H:%M:%S.%f"
 
@@ -30,7 +29,11 @@ class BaseModel:
 
     def save(self):
         """This saves changes to the instance"""
+        from models import storage
         self.updated_at = datetime.now()
+        storage.new(self)
+        storage.save()
+        
 
     def to_dict(self):
         """This method returns a dictionary containing all"""
