@@ -24,7 +24,6 @@ class BaseModel:
             self.created_at = datetime.now()
             self.updated_at = self.created_at
             models.storage.new(self)
-            
 
     def __str__(self):
         """This prints the string representation of the instance"""
@@ -33,9 +32,8 @@ class BaseModel:
     def save(self):
         """This saves changes to the instance"""
         from models import storage
-        self.updated_at = datetime.now()  
+        self.updated_at = datetime.now()
         models.storage.save()
-        
 
     def to_dict(self):
         """This method returns a dictionary containing all"""
