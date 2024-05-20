@@ -124,9 +124,9 @@ class HBNBCommand(cmd.Cmd):
     
     def do_update(self, args):
         """
-        Updates an instance based on the class name and id by adding or
-        updating attribute (save the change into the JSON file).
-        Ex: $ update BaseModel 1234-1234-1234 email "aibnb@holbertonschool.com"
+        Updates an instance based on the class name and id using a dictionary representation
+        (save the change into the JSON file).
+        Ex: $ update BaseModel 1234-1234-1234 {'email': 'aibnb@holbertonschool.com'}
         """
         args = shlex.split(args)
         if len(args) == 0:
@@ -143,15 +143,17 @@ class HBNBCommand(cmd.Cmd):
             print("** no instance found **")
             return
         if len(args) < 3:
-            print("** attribute name missing **")
+            print("** dictionary missing **")
             return
-        if len(args) < 4:
-            print("** value missing **")
+        try:
+            update_dict = eval(args[2])
+        except Exception as e:
+            print("** invalid dictionary format **")
             return
         instance = storage.all()[key]
-        setattr(instance, args[2], args[3])
+        for k, v in update_dict.items():
+            setattr(instance, k, v)
         instance.save()
-        
 
     def default(self, line):
         """
@@ -184,7 +186,7 @@ class HBNBCommand(cmd.Cmd):
                     args = shlex.split(args_str)
                     if len(args) == 3:
                         self.do_update(f"{class_name} {args[0]} {args[1]} {args[2]}")
-                    return
+                        return
         print("*** Unknown syntax: {}".format(line))
 
 if __name__ == '__main__':
