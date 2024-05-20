@@ -1,6 +1,5 @@
 #!/usr/bin/python3
-"""Class HBNBComand a program called console.py
-"""
+"""Class HBNBComand a program called console.py"""
 
 import cmd
 import json
