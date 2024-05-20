@@ -151,7 +151,7 @@ class HBNBCommand(cmd.Cmd):
         instance = storage.all()[key]
         setattr(instance, args[2], args[3])
         instance.save()
-
+        
     def default(self, line):
         """
         Handle default behavior when an invalid command is entered.
