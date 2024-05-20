@@ -1,60 +1,39 @@
 #!/usr/bin/python3
 """ Class FileStorage """
-from json import dump, load, dumps
+
+from json import load, dump
 from os.path import exists
-from models import base_model, user, place, state, city, amenity, review
-
-BaseModel = base_model.BaseModel
-User = user.User
-Place = place.Place
-State = state.State
-City = city.City
-Amenity = amenity.Amenity
-Review = review.Review
-name_class = ["BaseModel", "City", "State",
-              "Place", "Amenity", "Review", "User"]
-
 
 class FileStorage:
-    """
-    """
+    """Handles storage of all class instances."""
+
     __file_path = "file.json"
     __objects = {}
 
     def all(self):
-        """
-        """
+        """Returns the dictionary __objects."""
         return FileStorage.__objects
 
     def new(self, obj):
-        """ sets  the obj with key in __objects
-        """
+        """Sets the obj with key in __objects"""
         class_name = obj.__class__.__name__
-        id = obj.id
-        clas_id = class_name + "." + id
-        FileStorage.__objects[clas_id] = obj
+        obj_id = obj.id
+        FileStorage.__objects[f"{class_name}.{obj_id}"] = obj
 
     def save(self):
-        """ file storage
-        """
-        dict_to_json = {}
-        for key, value in FileStorage.__objects.items():
-            dict_to_json[key] = value.to_dict()
-        with open(FileStorage.__file_path, "w", encoding='utf-8') as fil:
-            dump(dict_to_json, fil)
+        """Saves __objects to JSON file"""
+        dict_to_json = {key: obj.to_dict() for key, obj in FileStorage.__objects.items()}
+        with open(FileStorage.__file_path, "w", encoding='utf-8') as file:
+            dump(dict_to_json, file)
 
     def reload(self):
-        """ if (__file_path) exists deserializes JSON file to __objects
-            elif , do nothing. If the file not exist,
-        """
-        dic_obj = {}
-        FileStorage.__objects = {}
-        if (exists(FileStorage.__file_path)):
-            with open(FileStorage.__file_path, "r") as fil:
-                dic_obj = load(fil)
-                for key, value in dic_obj.items():
-                    class_nam = key.split(".")[0]
-                    if class_nam in name_class:
-                        FileStorage.__objects[key] = eval(class_nam)(**value)
-                    else:
-                        pass
+        """Loads storage dictionary from file"""
+        if exists(FileStorage.__file_path):
+            with open(FileStorage.__file_path, "r", encoding='utf-8') as file:
+                obj_dict = load(file)
+                for key, value in obj_dict.items():
+                    class_name = key.split('.')[0]
+                    module_path = f"models.{class_name.lower()}"
+                    module = __import__(module_path, fromlist=[class_name])
+                    class_ = getattr(module, class_name)
+                    FileStorage.__objects[key] = class_(**value)
