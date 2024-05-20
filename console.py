@@ -117,7 +117,7 @@ class HBNBCommand(cmd.Cmd):
             if args[0] not in classes:
                 print("** class doesn't exist **")
                 return
-            obj_list = [str(obj) for key, obj in storage.all().items() if key.startswith(args[0])]
+            obj_list = [str(obj) for obj in storage.all().values() if isinstance(obj, classes[args[0]])]
         else:
             obj_list = [str(obj) for obj in storage.all().values()]
         print(obj_list)
@@ -150,6 +150,22 @@ class HBNBCommand(cmd.Cmd):
             return
         setattr(storage.all()[key], args[2], args[3])
         storage.all()[key].save()
+
+    # Add the default method here
+    def default(self, line):
+        """
+        Handle default behavior when an invalid command is entered.
+        Check if the command follows the format "<class name>.all()" and call
+        the corresponding class method if it matches.
+        """
+        parts = line.split('.')
+        if len(parts) == 2 and parts[1] == 'all()':
+            class_name = parts[0]
+            if class_name in classes:
+                obj_list = [str(obj) for obj in storage.all().values() if isinstance(obj, classes[class_name])]
+                print(obj_list)
+                return
+        print("*** Unknown syntax: {}".format(line))
 
 
 if __name__ == '__main__':
