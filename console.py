@@ -156,45 +156,35 @@ class HBNBCommand(cmd.Cmd):
         """
         Handle default behavior when an invalid command is entered.
         Check if the command follows the format "<class name>.all()", "<class name>.count()",
-        "<class name>.show(<id>)", or "<class name>.destroy(<id>)" and call
-        the corresponding class method if it matches.
+        "<class name>.show(<id>)", "<class name>.destroy(<id>)", or "<class name>.update(<id>, <attribute name>, <attribute value>)"
+        and call the corresponding class method if it matches.
         """
         parts = line.split('.')
         if len(parts) == 2:
-            class_name, method_name = parts
-            if method_name == 'all()':
-                if class_name in classes:
-                    obj_list = [str(obj) for obj in storage.all().values() if isinstance(obj, classes[class_name])]
-                    print(obj_list)
+            class_name, method_call = parts[0], parts[1]
+            if class_name in classes:
+                if method_call == "all()":
+                    self.do_all(class_name)
                     return
-            elif method_name == 'count()':
-                if class_name in classes:
-                    count = len([obj for obj in storage.all().values() if isinstance(obj, classes[class_name])])
+                elif method_call == "count()":
+                    count = sum(1 for obj in storage.all().values() if obj.__class__.__name__ == class_name)
                     print(count)
                     return
-            elif method_name.startswith('show(') and method_name.endswith(')'):
-                id_str = method_name[5:-1]
-                if class_name in classes:
-                    key = f"{class_name}.{id_str}"
-                    if key in storage.all():
-                        print(storage.all()[key])
-                        return
-                    else:
-                        print("** no instance found **")
-                        return
-            elif method_name.startswith('destroy(') and method_name.endswith(')'):
-                id_str = method_name[8:-1]
-                if class_name in classes:
-                    key = f"{class_name}.{id_str}"
-                    if key in storage.all():
-                        del storage.all()[key]
-                        storage.save()
-                        return
-                    else:
-                        print("** no instance found **")
-                        return
+                elif method_call.startswith("show(") and method_call.endswith(")"):
+                    instance_id = method_call[5:-1]
+                    self.do_show(f"{class_name} {instance_id}")
+                    return
+                elif method_call.startswith("destroy(") and method_call.endswith(")"):
+                    instance_id = method_call[8:-1]
+                    self.do_destroy(f"{class_name} {instance_id}")
+                    return
+                elif method_call.startswith("update(") and method_call.endswith(")"):
+                    args_str = method_call[7:-1]
+                    args = shlex.split(args_str)
+                    if len(args) == 2:
+                        self.do_update(f"{class_name} {args[0]} {args[1]} {args[2]}")
+                    return
         print("*** Unknown syntax: {}".format(line))
-
 
 if __name__ == '__main__':
     HBNBCommand().cmdloop()
