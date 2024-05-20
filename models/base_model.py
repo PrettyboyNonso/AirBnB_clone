@@ -22,6 +22,9 @@ class BaseModel:
             self.id = str(uuid.uuid4())
             self.created_at = datetime.now()
             self.updated_at = self.created_at
+            from models import storage
+            storage.new(self)
+            
 
     def __str__(self):
         """This prints the string representation of the instance"""
@@ -30,8 +33,7 @@ class BaseModel:
     def save(self):
         """This saves changes to the instance"""
         from models import storage
-        self.updated_at = datetime.now()
-        storage.new(self)
+        self.updated_at = datetime.now()  
         storage.save()
         
 
