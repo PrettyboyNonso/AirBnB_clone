@@ -152,6 +152,7 @@ class HBNBCommand(cmd.Cmd):
         setattr(instance, args[2], args[3])
         instance.save()
         
+
     def default(self, line):
         """
         Handle default behavior when an invalid command is entered.
@@ -181,7 +182,7 @@ class HBNBCommand(cmd.Cmd):
                 elif method_call.startswith("update(") and method_call.endswith(")"):
                     args_str = method_call[7:-1]
                     args = shlex.split(args_str)
-                    if len(args) == 2:
+                    if len(args) == 3:
                         self.do_update(f"{class_name} {args[0]} {args[1]} {args[2]}")
                     return
         print("*** Unknown syntax: {}".format(line))
