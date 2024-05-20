@@ -14,7 +14,7 @@ class FileStorage:
 
     def new(self, obj):
         """Sets in __objects the obj with key <obj class name>.id"""
-        key = obj.__class__.__name__ + "." + obj.id
+        key = f"{obj.__class__.__name__}.{obj.id}"
         self.__objects[key] = obj
 
     def save(self):
@@ -30,9 +30,7 @@ class FileStorage:
                 obj_dict = json.load(f)
             for key, value in obj_dict.items():
                 class_name = value["__class__"]
-                if class_name == "BaseModel":
-                    self.__objects[key] = BaseModel(**value)
-                elif class_name == "User":
-                    self.__objects[key] = User(**value)
+                cls = globals()[class_name]
+                self.__objects[key] = cls(**value)
         except FileNotFoundError:
             pass
