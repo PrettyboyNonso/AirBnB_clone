@@ -1,5 +1,11 @@
 #!/usr/bin/python3
-"""Class HBNBComand a program called console.py"""
+"""
+console.py
+
+This module provides a command-line interface (CLI) for the AirBnB clone project.
+It allows users to interact with the application through various commands to
+create, update, delete, and display instances of different classes.
+"""
 
 import cmd
 import json
