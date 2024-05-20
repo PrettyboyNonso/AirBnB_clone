@@ -151,20 +151,25 @@ class HBNBCommand(cmd.Cmd):
         setattr(storage.all()[key], args[2], args[3])
         storage.all()[key].save()
 
-    # Add the default method here
     def default(self, line):
         """
         Handle default behavior when an invalid command is entered.
-        Check if the command follows the format "<class name>.all()" and call
+        Check if the command follows the format "<class name>.all()" or "<class name>.count()" and call
         the corresponding class method if it matches.
         """
         parts = line.split('.')
-        if len(parts) == 2 and parts[1] == 'all()':
-            class_name = parts[0]
-            if class_name in classes:
-                obj_list = [str(obj) for obj in storage.all().values() if isinstance(obj, classes[class_name])]
-                print(obj_list)
-                return
+        if len(parts) == 2:
+            class_name, method_name = parts
+            if method_name == 'all()':
+                if class_name in classes:
+                    obj_list = [str(obj) for obj in storage.all().values() if isinstance(obj, classes[class_name])]
+                    print(obj_list)
+                    return
+            elif method_name == 'count()':
+                if class_name in classes:
+                    count = len([obj for obj in storage.all().values() if isinstance(obj, classes[class_name])])
+                    print(count)
+                    return
         print("*** Unknown syntax: {}".format(line))
 
 
