@@ -121,35 +121,36 @@ class HBNBCommand(cmd.Cmd):
         else:
             obj_list = [str(obj) for obj in storage.all().values()]
         print(obj_list)
-
+    
     def do_update(self, args):
-        """
-        Updates an instance based on the class name and id by adding or
-        updating attribute (save the change into the JSON file).
-        Ex: $ update BaseModel 1234-1234-1234 email "aibnb@holbertonschool.com"
-        """
-        args = shlex.split(args)
-        if len(args) == 0:
-            print("** class name missing **")
-            return
-        if args[0] not in classes:
-            print("** class doesn't exist **")
-            return
-        if len(args) < 2:
-            print("** instance id missing **")
-            return
-        key = f"{args[0]}.{args[1]}"
-        if key not in storage.all():
-            print("** no instance found **")
-            return
-        if len(args) < 3:
-            print("** attribute name missing **")
-            return
-        if len(args) < 4:
-            print("** value missing **")
-            return
-        setattr(storage.all()[key], args[2], args[3])
-        storage.all()[key].save()
+    """
+    Updates an instance based on the class name and id by adding or
+    updating attribute (save the change into the JSON file).
+    Ex: $ update BaseModel 1234-1234-1234 email "aibnb@holbertonschool.com"
+    """
+    args = shlex.split(args)
+    if len(args) == 0:
+        print("** class name missing **")
+        return
+    if args[0] not in classes:
+        print("** class doesn't exist **")
+        return
+    if len(args) < 2:
+        print("** instance id missing **")
+        return
+    key = f"{args[0]}.{args[1]}"
+    if key not in storage.all():
+        print("** no instance found **")
+        return
+    if len(args) < 3:
+        print("** attribute name missing **")
+        return
+    if len(args) < 4:
+        print("** value missing **")
+        return
+    instance = storage.all()[key]
+    setattr(instance, args[2], args[3])
+    instance.save()
 
     def default(self, line):
         """
