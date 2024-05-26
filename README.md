@@ -1,4 +1,5 @@
 # Project: 0x00. AirBnB clone - The console
+![65f4a1dd9c51265f49d0](https://github.com/a3ela/AirBnB_clone/assets/117747814/4c0534cc-714e-4d4e-abd5-8c867104ed60)
 
 The console
 create your data model
